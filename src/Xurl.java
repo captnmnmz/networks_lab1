@@ -17,27 +17,41 @@ public class Xurl {
 			/*Create a socket*/
 			_socket_ = new Socket(_url_.hostname,_url_.port); ///What happens when port == -1 ?
 			
+			/* Output */
 			OutputStream out = _socket_.getOutputStream();
 			PrintStream output = new PrintStream(out);
 			output.print("GET"+ _url_.path + " HTTP/1.0\r\n");
-		
+
+			/*Input*/
 			InputStream in = _socket_.getInputStream();
 			InputStreamReader in_reader = new InputStreamReader(in);
 			BufferedReader bufferedreader = new BufferedReader (in_reader);
-			String line = bufferedreader.readLine();
-			while (line  != null) {
-				/*Test code*/
-				int code = 
-				/*Read new line*/
-				line = bufferedreader.readLine();
-			}
-			
-			
-			/*Create data streams*/
-			
-		
-				
-				
+			String line = new String();
+			while ((line = bufferedreader.readLine()) != null) {
+				String[] parsed_line = line.split(" ", 3);
+				System.out.println(parsed_line);
+				/*Code determination*/
+				int code = Integer.parseInt(parsed_line[1]);
+				if (code == 200) {
+					System.out.println(parsed_line[2]);
+				}
+				else if (code == 301){
+					System.out.println(parsed_line[2]);
+					System.out.println("You will be redirected to your page");
+				}
+				else if (code == 302){
+					System.out.println(parsed_line[2]);
+					System.out.println("You will be redirected to your page");
+				}
+				else if (code == 400){
+					System.out.println(parsed_line[2]);
+					System.out.println("Please retry with a correct address");
+				}
+				else if (code == 404){
+					System.out.println(parsed_line[2]);
+					System.out.println("Page not found, please retry");
+				}
+			}		
 		}
 		catch(IOException e) {
 			/*Exception from the Socket creation*/
