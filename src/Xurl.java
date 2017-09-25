@@ -8,8 +8,8 @@ import java.io.BufferedReader;
 
 public class Xurl {
 	
-	public Xurl (String url) {
-		System.out.println("test");
+	public static void main (String[] args){
+		String url=args[0];
 		Socket _socket_ = null;
 		try {
 			/*Verify URL*/
@@ -21,12 +21,12 @@ public class Xurl {
 			if (port == -1 ) {
 				port = 80; 
 			}
-			_socket_ = new Socket(_url_.hostname, port); ///What happens when port == -1 ?
+			_socket_ = new Socket(_url_.hostname, port);
 			
 			/* Output */
 			OutputStream out = _socket_.getOutputStream();
 			PrintStream output = new PrintStream(out);
-			output.print("GET"+ _url_.path + " HTTP/1.0\r\n");
+			output.print("GET"+ _url_.path + " HTTP/1.1\r\n");
 
 			/*Input*/
 			InputStream in = _socket_.getInputStream();
@@ -34,13 +34,12 @@ public class Xurl {
 			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			String line = new String();
 			while ((line = bufferedreader.readLine()) != null) {
+				System.out.println(line);
 				String[] parsed_line = line.split(" ", 3);
-				System.out.println(parsed_line);
 				/*Code determination*/
 				int code = Integer.parseInt(parsed_line[1]);
 				if (code == 200) {
 					System.out.println(parsed_line[2]);
-					System.out.println("Test 2");
 				}
 				else if (code == 301){
 					System.out.println(parsed_line[2]);
@@ -58,7 +57,8 @@ public class Xurl {
 					System.out.println(parsed_line[2]);
 					System.out.println("Page not found, please retry");
 				}
-			}		
+			}
+			_socket_.close();
 		}
 		catch(IOException e) {
 			/*Exception from the Socket creation*/
