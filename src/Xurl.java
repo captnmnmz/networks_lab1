@@ -15,7 +15,12 @@ public class Xurl {
 			MyURL _url_ = new MyURL(url);
 			
 			/*Create a socket*/
-			_socket_ = new Socket(_url_.hostname,_url_.port); ///What happens when port == -1 ?
+			
+			int port = _url_.port; /// Case when port wasn't specify
+			if (port == -1 ) {
+				port = 80; 
+			}
+			_socket_ = new Socket(_url_.hostname, port); ///What happens when port == -1 ?
 			
 			/* Output */
 			OutputStream out = _socket_.getOutputStream();
@@ -25,7 +30,7 @@ public class Xurl {
 			/*Input*/
 			InputStream in = _socket_.getInputStream();
 			InputStreamReader in_reader = new InputStreamReader(in);
-			BufferedReader bufferedreader = new BufferedReader (in_reader);
+			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			String line = new String();
 			while ((line = bufferedreader.readLine()) != null) {
 				String[] parsed_line = line.split(" ", 3);
@@ -67,11 +72,6 @@ public class Xurl {
 		catch(IllegalArgumentException e) {
 			/*Exception from MyURL*/
 			System.out.println(e.getMessage());
-		}
-
-		
-		
-		
-		
+		}		
 	}
 }
