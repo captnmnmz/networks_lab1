@@ -26,7 +26,12 @@ public class Xurl {
 			/* Output */
 			OutputStream out = _socket_.getOutputStream();
 			PrintStream output = new PrintStream(out);
-			output.print("GET"+ _url_.path + " HTTP/1.1\r\n");
+			String request = "GET "+ _url_.path + " HTTP/1.1\r\n";
+			request += "Host: " + _url_.hostname + "\r\n";
+			request +="\r\n";
+			System.out.println(request);
+			output.print(request);
+			
 
 			/*Input*/
 			InputStream in = _socket_.getInputStream();
