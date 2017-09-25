@@ -19,7 +19,7 @@ public class main {
 			System.out.println(path);
 			
 		}catch (IllegalArgumentException e) {
-			System.out.println(e.toString());
+			System.out.println(e.getMessage());
 		}
 		
 

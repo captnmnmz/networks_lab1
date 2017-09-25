@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 public class Xurl {
 	
 	public Xurl (String url) {
+		System.out.println("test");
 		Socket _socket_ = null;
 		try {
 			/*Verify URL*/
@@ -25,7 +26,7 @@ public class Xurl {
 			/*Input*/
 			InputStream in = _socket_.getInputStream();
 			InputStreamReader in_reader = new InputStreamReader(in);
-			BufferedReader bufferedreader = new BufferedReader (in_reader);
+			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			String line = new String();
 			while ((line = bufferedreader.readLine()) != null) {
 				String[] parsed_line = line.split(" ", 3);
