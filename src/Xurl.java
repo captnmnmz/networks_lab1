@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 
 public class Xurl {
 	
-	public Xurl (String url) throws IOException {
+	public Xurl (String url) {
 		Socket _socket_ = null;
 		try {
 			/*Verify URL*/
