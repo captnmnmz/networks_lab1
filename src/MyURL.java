@@ -1,4 +1,3 @@
-
 public class MyURL {
 	public String protocol;
 	public String hostname;
@@ -34,26 +33,27 @@ public class MyURL {
 				protocol=parsed[0];
 				if (parsed_len<3){
 					port=-1;
-					String[] parsed_ = parsed[1].split("/");
-					hostname=parsed_[2];
-					if (parsed_.length ==3) {
+					/*We remove the first "//" */
+					String[] parsed_ = (parsed[1].substring(2)).split("/",2);
+					/*It will return "{hostname,path(even if their is / in the path)}*/
+					hostname=parsed_[0];
+					if (parsed_.length == 1) {
 						path="/";
 					}
 					else {
-						path="/"+parsed_[3];
+						path="/"+parsed_[1];
 					}
 				}
 				
 				else {
-					String[] parsed_ = parsed[1].split("/");
-					String[] _parsed_= parsed[2].split("/");
-					hostname=parsed_[2];
-					port=Integer.parseInt(_parsed_[0]);
-					if (_parsed_.length ==1) {
+					String[] parsed_= parsed[2].split("/",2);
+					hostname=parsed[1].substring(2);
+					port=Integer.parseInt(parsed_[0]);
+					if (parsed_.length == 1) {
 						path="/";
 					}
 					else {
-						path="/"+_parsed_[1];
+						path="/"+parsed_[1];
 					}
 					
 				}
