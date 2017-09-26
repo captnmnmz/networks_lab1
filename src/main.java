@@ -5,7 +5,7 @@ public class main {
 		// TODO Auto-generated method stub
 		String protocol,host,path;
 		int port;
-		String test_url="http://www.google.com:80/mome/b/c/b/myfile.php";
+		String test_url="http://host:80:/path/file";
 		try {
 			MyURL _myurl= new MyURL(test_url);
 			protocol=_myurl.getProtocol();
