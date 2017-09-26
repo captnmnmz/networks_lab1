@@ -7,11 +7,18 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 
 public class Xurl {
 	
+
+
+
 	public static void main (String[] args){
+		int args_size=args.length;
 		String url=args[0];
+
 		Socket _socket_ = null;
 		try {
 			/*Verify URL*/
@@ -19,19 +26,47 @@ public class Xurl {
 			
 			/*Create a socket*/
 			
-			int port = _url_.getPort(); /// Case when port wasn't specify
+			int port = _url_.getPort(); 
+			/// Case when port wasn't specify
 			if (port == -1 ) {
 				port = 80; 
 			}
 			
 			String path = _url_.getPath();
 			String host = _url_.getHost();
-			_socket_ = new Socket(_url_.getHost(), port);
 			
-			/* Output */
-			OutputStream out = _socket_.getOutputStream();
-			PrintStream output = new PrintStream(out);
-			String request = "GET "+ path + " HTTP/1.1\r\n";
+			OutputStream out=null;
+			PrintStream output=null;
+			String request=null;
+			
+			switch (args_size) {
+			/**
+			 * Differentiate the different cases :
+			 * case 1 : Direct connection to host
+			 * case 3 : connect to host via proxy (proxy, proxyport arguments)
+			 */
+			case 1:
+				_socket_ = new Socket(_url_.getHost(), port);
+				
+				/* Output */
+				out = _socket_.getOutputStream();
+				output = new PrintStream(out);
+				request = "GET "+ path + " HTTP/1.1\r\n";
+				break;
+			
+			case 3:
+				_socket_ = new Socket(args[1], Integer.parseInt(args[2]));
+				
+				/* Output */
+				out = _socket_.getOutputStream();
+				output = new PrintStream(out);
+				request = "GET "+ url + " HTTP/1.1\r\n";
+				break;
+				
+			default:
+				throw new IllegalArgumentException("Wrong args entered");
+			}
+
 			request += "Host: " + host + "\r\n";
 			request +="\r\n";
 			System.out.println(request);
@@ -42,6 +77,11 @@ public class Xurl {
 			InputStream in = _socket_.getInputStream();
 			InputStreamReader in_reader = new InputStreamReader(in);
 			BufferedReader bufferedreader = new BufferedReader(in_reader);
+			
+			
+			FileWriter writer = new FileWriter(new File("~/received.txt"));
+			
+
 			
 			String line = new String();
 			line = bufferedreader.readLine();
@@ -72,12 +112,16 @@ public class Xurl {
 			while (bufferedreader.ready()) {
 				if ((line = bufferedreader.readLine()) != null){
 					System.out.println(line);
+					writer.write(line);
 				}
 			}
 			System.out.println("File downloaded");
 			/*Closing connection*/
 			request = "CONNECTION: Close";
 			output.print(request);
+			
+			writer.flush();
+			writer.close();
 			
 			output.close();
 			bufferedreader.close();
@@ -108,7 +152,9 @@ public class Xurl {
 		catch(IllegalArgumentException e) {
 			/*Exception from MyURL*/
 			System.err.println(e.getMessage());
-			System.out.println("Your URL might not be well formated");
+			System.out.println("Your URL might not be well formated, or wrong args entered");
 		}
 	}
+	
+
 }
