@@ -18,13 +18,13 @@ public class Xurl {
 	public static void main (String[] args){
 		int args_size=args.length;
 		String url=args[0];
+		
+		Socket _socket_=null;
 
-		Socket _socket_ = null;
 		try {
 			/*Verify URL*/
 			MyURL _url_ = new MyURL(url);
 			
-			/*Create a socket*/
 			
 			int port = _url_.getPort(); 
 			/// Case when port wasn't specify
@@ -34,10 +34,11 @@ public class Xurl {
 			
 			String path = _url_.getPath();
 			String host = _url_.getHost();
+			String webFile=path.substring(path.lastIndexOf('/')+1,path.length());
+				
+			String param=null;
+			String param2=null;
 			
-			OutputStream out=null;
-			PrintStream output=null;
-			String request=null;
 			
 			switch (args_size) {
 			/**
@@ -46,27 +47,28 @@ public class Xurl {
 			 * case 3 : connect to host via proxy (proxy, proxyport arguments)
 			 */
 			case 1:
-				_socket_ = new Socket(_url_.getHost(), port);
-				
-				/* Output */
-				out = _socket_.getOutputStream();
-				output = new PrintStream(out);
-				request = "GET "+ path + " HTTP/1.1\r\n";
+				param=host;
+				param2=path;
 				break;
 			
 			case 3:
-				_socket_ = new Socket(args[1], Integer.parseInt(args[2]));
-				
-				/* Output */
-				out = _socket_.getOutputStream();
-				output = new PrintStream(out);
-				request = "GET "+ url + " HTTP/1.1\r\n";
+				param=args[1];
+				port=Integer.parseInt(args[2]);
+				param2=url;
+
 				break;
-				
+			
 			default:
 				throw new IllegalArgumentException("Wrong args entered");
+				
 			}
-
+			
+			_socket_=new Socket(param,port);
+			/* Output */
+			OutputStream out = _socket_.getOutputStream();
+			PrintStream output = new PrintStream(out);
+			String request = "GET "+ param2 + " HTTP/1.1\r\n";
+			
 			request += "Host: " + host + "\r\n";
 			request +="\r\n";
 			System.out.println(request);
@@ -78,10 +80,8 @@ public class Xurl {
 			InputStreamReader in_reader = new InputStreamReader(in);
 			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			
-			
-			FileWriter writer = new FileWriter(new File("~/received.txt"));
-			
-
+			File received = new File(webFile);
+			FileWriter writer = new FileWriter(received);
 			
 			String line = new String();
 			line = bufferedreader.readLine();
