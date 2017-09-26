@@ -50,7 +50,7 @@ public class Xurl {
 			/*Code determination*/
 			int code = Integer.parseInt(parsed_line[1]);
 			if (code == 200) {
-				System.err.println(parsed_line[2]);
+				System.out.println(parsed_line[2]);
 			}
 			else if (code == 301){
 				System.err.println(parsed_line[2]);
