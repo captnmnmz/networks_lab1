@@ -11,6 +11,12 @@ import java.io.File;
 import java.io.FileWriter;
 
 public class Xurl {
+	/**
+	 * 
+	 * @author Jules YATES
+	 * 
+	 * @author Bastien CHEVALLIER
+	 */
 	
 
 
@@ -81,7 +87,7 @@ public class Xurl {
 			InputStreamReader in_reader = new InputStreamReader(in);
 			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			
-			File received = new File("../src/"+webFile);
+			File received = new File(webFile);
 			FileWriter writer = new FileWriter(received);
 			
 			String line = new String();
@@ -109,11 +115,16 @@ public class Xurl {
 				System.err.println(parsed_line[2]);
 				System.out.println("Page not found, please retry");
 			}
-			
+			//We delete the metadata
+			while(!line.isEmpty()) {
+				line=bufferedreader.readLine();
+			}
 			while (bufferedreader.ready()) {
 				if ((line = bufferedreader.readLine()) != null){
 					System.out.println(line);
+					
 					writer.write(line);
+					writer.write(System.getProperty( "line.separator" ));
 				}
 			}
 			System.out.println("File downloaded");

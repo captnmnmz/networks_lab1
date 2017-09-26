@@ -1,5 +1,10 @@
 
 public class MyURL {
+	/**
+	 * @author Jules YATES
+	 * 
+	 * @author Bastien CHEVALLIER
+	 */
 	public String protocol;
 	public String hostname;
 	public int port;
