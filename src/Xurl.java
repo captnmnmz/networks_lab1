@@ -27,13 +27,14 @@ public class Xurl {
 			
 			
 			int port = _url_.getPort(); 
-			/// Case when port wasn't specify
+			/// Case when port wasn't specified
 			if (port == -1 ) {
 				port = 80; 
 			}
 			
 			String path = _url_.getPath();
 			String host = _url_.getHost();
+			
 			String webFile=path.substring(path.lastIndexOf('/')+1,path.length());
 				
 			String param=null;
@@ -80,7 +81,7 @@ public class Xurl {
 			InputStreamReader in_reader = new InputStreamReader(in);
 			BufferedReader bufferedreader = new BufferedReader(in_reader);
 			
-			File received = new File(webFile);
+			File received = new File("../src/"+webFile);
 			FileWriter writer = new FileWriter(received);
 			
 			String line = new String();
